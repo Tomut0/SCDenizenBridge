@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+}
+
+group = 'minat0'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        name = 'roinujnosde-repo'
+        url = 'https://repo.roinujnosde.me/releases/'
+    }
+    maven {
+        name = 'everything'
+        url = 'https://repo.citizensnpcs.co'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+
+    compileOnly files("libs/denizen-1.2.5-SNAPSHOT.jar")
+//    compileOnly "com.denizenscript:denizen:${denizenVersion}"
+    compileOnly "com.denizenscript:depenizen:${depenizenVersion}"
+    compileOnly "net.sacredlabyrinth.phaed.simpleclans:SimpleClans:${simpleclansVersion}"
+}
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
