@@ -78,7 +78,7 @@ public class ClanTag implements ObjectTag {
                 new ElementTag(clanTag.getClan().isFriendlyFire())
         );
 
-        tagProcessor.registerTag(ElementTag.class, "members_fee", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "member_fee", (attribute, clanTag) ->
                 new ElementTag(clanTag.getClan().getMemberFee())
         );
 
@@ -104,44 +104,44 @@ public class ClanTag implements ObjectTag {
                 new ElementTag(clanTag.getClan().getTotalKDR())
         );
 
-        tagProcessor.registerTag(ElementTag.class, "can_deposit", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "allow_deposit", (attribute, clanTag) ->
                 new ElementTag(clanTag.getClan().isAllowDeposit())
         );
 
-        tagProcessor.registerTag(ElementTag.class, "can_withdraw", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "allow_withdraw", (attribute, clanTag) ->
                 new ElementTag(clanTag.getClan().isAllowWithdraw())
         );
 
-        tagProcessor.registerTag(ElementTag.class, "is_verified", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "verified", (attribute, clanTag) ->
                 new ElementTag(clanTag.getClan().isVerified())
         );
 
-        tagProcessor.registerTag(ElementTag.class, "is_permanent", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "permanent", (attribute, clanTag) ->
                 new ElementTag(clanTag.getClan().isPermanent())
         );
 
-        tagProcessor.registerTag(ElementTag.class, "is_member", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "unrivable", (attribute, clanTag) ->
+                new ElementTag(clanTag.getClan().isUnrivable())
+        );
+
+        tagProcessor.registerTag(ElementTag.class, "member", (attribute, clanTag) ->
                 attribute.hasParam() ? new ElementTag(clanTag.getClan().isMember(attribute.getParam())) : null
         );
 
-        tagProcessor.registerTag(ElementTag.class, "is_leader", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "leader", (attribute, clanTag) ->
                 attribute.hasParam() ? new ElementTag(clanTag.getClan().isLeader(attribute.getParam())) : null
         );
 
-        tagProcessor.registerTag(ElementTag.class, "is_rival", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "rival", (attribute, clanTag) ->
                 attribute.hasParam() ? new ElementTag(clanTag.getClan().isRival(attribute.getParam())) : null
         );
 
-        tagProcessor.registerTag(ElementTag.class, "is_ally", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "ally", (attribute, clanTag) ->
                 attribute.hasParam() ? new ElementTag(clanTag.getClan().isAlly(attribute.getParam())) : null
         );
 
-        tagProcessor.registerTag(ElementTag.class, "is_warring", (attribute, clanTag) ->
+        tagProcessor.registerTag(ElementTag.class, "warring", (attribute, clanTag) ->
                 attribute.hasParam() ? new ElementTag(clanTag.getClan().isWarring(attribute.getParam())) : null
-        );
-
-        tagProcessor.registerTag(ElementTag.class, "is_unrivable", (attribute, clanTag) ->
-                new ElementTag(clanTag.getClan().isUnrivable())
         );
     }
 
