@@ -4,42 +4,41 @@ import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import minat0.scdenizenbridge.objects.ClanPlayerTag;
 import minat0.scdenizenbridge.objects.ClanTag;
-import net.sacredlabyrinth.phaed.simpleclans.events.CreateClanEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.PlayerKickedClanEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.Objects;
+public class PlayerKickedScriptEvent extends BukkitScriptEvent implements Listener {
+    private PlayerKickedClanEvent event;
 
-public class ClanCreateScriptEvent extends BukkitScriptEvent implements Listener {
-
-    private CreateClanEvent event;
-
-    public ClanCreateScriptEvent() {
+    public PlayerKickedScriptEvent() {
     }
 
     @Override
     public ScriptEntryData getScriptEntryData() {
-        return new BukkitScriptEntryData(Objects.requireNonNull(event.getClan().getLeaders().get(0).toPlayer()));
+        return new BukkitScriptEntryData(event.getClanPlayer().toPlayer());
     }
 
     @Override
     public ObjectTag getContext(String name) {
-        if (name.equals("clan")) {
-            return new ClanTag(event.getClan());
+        switch (name) {
+            case "tag" -> new ClanTag(event.getClan());
+            case "name" -> new ClanPlayerTag(event.getClanPlayer());
         }
 
         return super.getContext(name);
     }
 
     @EventHandler
-    public void onCreate(CreateClanEvent event) {
+    public void onKick(PlayerKickedClanEvent event) {
         this.event = event;
         fire(event);
     }
 
     @Override
     public boolean couldMatch(ScriptPath path) {
-        return path.eventLower.startsWith("clan create");
+        return path.eventLower.startsWith("clan player kick");
     }
 }
