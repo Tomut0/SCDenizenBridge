@@ -1,10 +1,13 @@
 package minat0.scdenizenbridge;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
+import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectFetcher;
 import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.depenizen.bukkit.Bridge;
+import minat0.scdenizenbridge.commands.DisbandCommand;
+import minat0.scdenizenbridge.objects.ClanPlayerTag;
 import minat0.scdenizenbridge.objects.ClanTag;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +18,10 @@ public class SCBridge extends Bridge {
     @Override
     public void init() {
         registerEvents();
+        DenizenCore.commandRegistry.registerCommand(DisbandCommand.class);
         ObjectFetcher.registerWithObjectFetcher(ClanTag.class, ClanTag.tagProcessor).setAsNOtherCode().generateBaseTag();
+        ObjectFetcher.registerWithObjectFetcher(ClanPlayerTag.class, ClanPlayerTag.tagProcessor).setAsNOtherCode().generateBaseTag();
+
         TagManager.registerTagHandler(ClanTag.class, "clan", attribute -> {
             ClanTag clanTag = null;
 
@@ -28,6 +34,19 @@ public class SCBridge extends Bridge {
             }
 
             return clanTag;
+        });
+        TagManager.registerTagHandler(ClanPlayerTag.class, "clanplayer", attribute -> {
+            ClanPlayerTag clanPlayerTag = null;
+
+            if (attribute.hasParam()) {
+                clanPlayerTag = attribute.paramAsType(ClanPlayerTag.class);
+                if (clanPlayerTag == null) {
+                    attribute.echoError("Clanplayer '" + attribute.getParam() + "' does not exist.");
+                    return null;
+                }
+            }
+
+            return clanPlayerTag;
         });
     }
 
