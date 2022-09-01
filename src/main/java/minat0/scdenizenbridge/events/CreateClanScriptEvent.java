@@ -1,9 +1,9 @@
 package minat0.scdenizenbridge.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
-import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import minat0.scdenizenbridge.ClanScriptEntryData;
 import minat0.scdenizenbridge.objects.ClanTag;
 import net.sacredlabyrinth.phaed.simpleclans.events.CreateClanEvent;
 import org.bukkit.event.EventHandler;
@@ -20,7 +20,7 @@ public class CreateClanScriptEvent extends BukkitScriptEvent implements Listener
 
     @Override
     public ScriptEntryData getScriptEntryData() {
-        return new BukkitScriptEntryData(Objects.requireNonNull(event.getClan().getLeaders().get(0).toPlayer()));
+        return new ClanScriptEntryData(Objects.requireNonNull(event.getClan().getLeaders().get(0).toPlayer()), event.getClan());
     }
 
     @Override

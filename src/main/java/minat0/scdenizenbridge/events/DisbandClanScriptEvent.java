@@ -2,8 +2,11 @@ package minat0.scdenizenbridge.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectTag;
+import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import minat0.scdenizenbridge.ClanScriptEntryData;
 import minat0.scdenizenbridge.objects.ClanTag;
 import net.sacredlabyrinth.phaed.simpleclans.events.DisbandClanEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -21,6 +24,11 @@ public class DisbandClanScriptEvent extends BukkitScriptEvent implements Listene
         }
 
         return super.getContext(name);
+    }
+
+    @Override
+    public ScriptEntryData getScriptEntryData() {
+        return new ClanScriptEntryData(event.getSender() instanceof Player ? ((Player) event.getSender()) : null, event.getClan());
     }
 
     @EventHandler

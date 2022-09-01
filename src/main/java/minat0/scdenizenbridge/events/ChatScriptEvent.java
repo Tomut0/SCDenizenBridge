@@ -1,17 +1,18 @@
 package minat0.scdenizenbridge.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
-import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import minat0.scdenizenbridge.ClanScriptEntryData;
 import minat0.scdenizenbridge.objects.ClanPlayerTag;
 import net.sacredlabyrinth.phaed.simpleclans.events.ChatEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ChatScriptEvent extends BukkitScriptEvent implements Listener {
@@ -22,7 +23,7 @@ public class ChatScriptEvent extends BukkitScriptEvent implements Listener {
 
     @Override
     public ScriptEntryData getScriptEntryData() {
-        return new BukkitScriptEntryData(event.getSender().toPlayer());
+        return new ClanScriptEntryData(Objects.requireNonNull(event.getSender().toPlayer()), event.getSender().getClan());
     }
 
     @Override
@@ -30,7 +31,8 @@ public class ChatScriptEvent extends BukkitScriptEvent implements Listener {
         switch (name) {
             case "sender" -> new ClanPlayerTag(event.getSender());
             case "message" -> new ElementTag(event.getMessage());
-            case "receivers" -> new ListTag((Collection<? extends ObjectTag>) event.getReceivers().stream().map(ClanPlayerTag::new).collect(Collectors.toSet()));
+            case "receivers" ->
+                    new ListTag((Collection<? extends ObjectTag>) event.getReceivers().stream().map(ClanPlayerTag::new).collect(Collectors.toSet()));
         }
 
         return super.getContext(name);
