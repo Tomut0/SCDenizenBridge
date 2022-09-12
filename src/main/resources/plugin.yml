@@ -1,6 +1,6 @@
 name: SCDenizenBridge
 version: '${version}'
-main: minat0.scdenizenbridge.SCDenizenBridge
+main: ru.minat0.scdenizenbridge.SCDenizenBridge
 api-version: 1.19
 depend: [ SimpleClans, Depenizen ]
 authors: [ Minat0 ]
