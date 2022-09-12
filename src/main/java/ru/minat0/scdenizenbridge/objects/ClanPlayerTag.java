@@ -6,6 +6,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.core.TimeTag;
+import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
 import ru.minat0.scdenizenbridge.SCDenizenBridge;
@@ -23,7 +24,7 @@ public class ClanPlayerTag implements ObjectTag {
     private final ClanPlayer cp;
     private String prefix = "cp";
 
-    public ClanPlayerTag(ClanPlayer cp) {
+    public ClanPlayerTag(@NotNull ClanPlayer cp) {
         this.cp = cp;
     }
 
@@ -31,6 +32,8 @@ public class ClanPlayerTag implements ObjectTag {
         return valueOf(string, null);
     }
 
+    // Called in Denizen internally
+    @SuppressWarnings("unused")
     public static boolean matches(String arg) {
         return valueOf(arg) != null;
     }
@@ -166,7 +169,7 @@ public class ClanPlayerTag implements ObjectTag {
 
     @Override
     public String identify() {
-        return "cp@";
+        return "cp@" + getClanPlayer().getUniqueId();
     }
 
     @Override
@@ -178,6 +181,11 @@ public class ClanPlayerTag implements ObjectTag {
     public ObjectTag setPrefix(String s) {
         this.prefix = s;
         return this;
+    }
+
+    @Override
+    public ObjectTag getObjectAttribute(Attribute attribute) {
+        return tagProcessor.getObjectAttribute(this, attribute);
     }
 
     @Override
