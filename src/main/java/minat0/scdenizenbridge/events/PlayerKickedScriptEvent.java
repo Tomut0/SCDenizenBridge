@@ -1,9 +1,9 @@
 package minat0.scdenizenbridge.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
-import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import minat0.scdenizenbridge.ClanScriptEntryData;
 import minat0.scdenizenbridge.objects.ClanPlayerTag;
 import minat0.scdenizenbridge.objects.ClanTag;
 import net.sacredlabyrinth.phaed.simpleclans.events.PlayerKickedClanEvent;
@@ -18,7 +18,7 @@ public class PlayerKickedScriptEvent extends BukkitScriptEvent implements Listen
 
     @Override
     public ScriptEntryData getScriptEntryData() {
-        return new BukkitScriptEntryData(event.getClanPlayer().toPlayer());
+        return new ClanScriptEntryData(event.getClanPlayer().toPlayer(), event.getClan());
     }
 
     @Override

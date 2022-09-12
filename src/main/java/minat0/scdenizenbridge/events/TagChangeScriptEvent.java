@@ -1,10 +1,10 @@
 package minat0.scdenizenbridge.events;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
-import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import minat0.scdenizenbridge.ClanScriptEntryData;
 import minat0.scdenizenbridge.objects.ClanTag;
 import net.sacredlabyrinth.phaed.simpleclans.events.TagChangeEvent;
 import org.bukkit.event.EventHandler;
@@ -19,7 +19,7 @@ public class TagChangeScriptEvent extends BukkitScriptEvent implements Listener 
 
     @Override
     public ScriptEntryData getScriptEntryData() {
-        return new BukkitScriptEntryData(event.getPlayer());
+        return new ClanScriptEntryData(event.getPlayer(), event.getClan());
     }
 
     @Override

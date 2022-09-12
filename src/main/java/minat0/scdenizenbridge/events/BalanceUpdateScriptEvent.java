@@ -3,8 +3,11 @@ package minat0.scdenizenbridge.events;
 import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import minat0.scdenizenbridge.ClanScriptEntryData;
 import minat0.scdenizenbridge.objects.ClanTag;
 import net.sacredlabyrinth.phaed.simpleclans.events.ClanBalanceUpdateEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -13,6 +16,11 @@ public class BalanceUpdateScriptEvent extends BukkitScriptEvent implements Liste
     private ClanBalanceUpdateEvent event;
 
     public BalanceUpdateScriptEvent() {
+    }
+
+    @Override
+    public ScriptEntryData getScriptEntryData() {
+        return new ClanScriptEntryData(Bukkit.getPlayer(event.getUpdater().getName()), event.getClan());
     }
 
     @Override
