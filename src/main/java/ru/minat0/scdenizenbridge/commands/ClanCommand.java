@@ -6,15 +6,18 @@ import com.denizenscript.denizencore.objects.Argument;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import ru.minat0.scdenizenbridge.objects.ClanTag;
 import ru.minat0.scdenizenbridge.utils.ScriptUtils;
 
-public class BbCommand extends AbstractCommand {
+import java.util.UUID;
 
-    public BbCommand() {
-        setName("bb");
-        setSyntax("bb [add/show/clear] (player:<player>) (clan:<clan>) [message]");
-        setRequiredArguments(1, 2);
+public class ClanCommand extends AbstractCommand {
+
+    public ClanCommand() {
+        setName("clan");
+        setSyntax("clan [invite/promote/demote] (player:<player>) (clan:<clan>)");
+        setRequiredArguments(1, 1);
     }
 
     @Override
@@ -24,12 +27,8 @@ public class BbCommand extends AbstractCommand {
                     && arg.matchesArgumentType(ClanTag.class)
                     && arg.matchesPrefix("clan")) {
                 scriptEntry.addObject("clan", arg.asType(ClanTag.class));
-            } else if (!scriptEntry.hasObject("action")
-                    && arg.matchesEnum(Action.class)) {
+            } else if (!scriptEntry.hasObject("action") && arg.matchesEnum(ClanCommand.Action.class)) {
                 scriptEntry.addObject("action", arg.asElement());
-            } else if (!scriptEntry.hasObject("message")
-                    || arg.matchesPrefix("message")) {
-                scriptEntry.addObject("message", arg.asElement());
             }
         }
 
@@ -41,21 +40,17 @@ public class BbCommand extends AbstractCommand {
     @Override
     public void execute(ScriptEntry scriptEntry) {
         ElementTag actionTag = scriptEntry.getElement("action");
-        ElementTag message = scriptEntry.getElement("message");
+        ClanCommand.Action action = ClanCommand.Action.valueOf(actionTag.asString().toUpperCase());
         ScriptUtils.CheckResult checkResult = ScriptUtils.defaultCheck(scriptEntry, getName(), actionTag.asString());
-
-        Action action = Action.valueOf(actionTag.asString().toUpperCase());
-        if ((message == null || message.asString().isEmpty()) && action.equals(Action.ADD)) {
-            throw new InvalidArgumentsRuntimeException("Message must not be empty!");
-        }
+        UUID uniqueId = checkResult.player().getUniqueId();
 
         switch (action) {
-            case ADD -> checkResult.clan().addBb(checkResult.player().getName(), message.asString());
-            case SHOW -> checkResult.clan().displayBb(checkResult.player());
-            case CLEAR -> checkResult.clan().clearBb();
+            case PROMOTE -> checkResult.clan().promote(uniqueId);
+            case DEMOTE -> checkResult.clan().demote(uniqueId);
+            case INVITE -> checkResult.clan().addPlayerToClan(new ClanPlayer(uniqueId));
             default -> throw new InvalidArgumentsRuntimeException("Must specify a valid action!");
         }
     }
 
-    private enum Action {ADD, SHOW, CLEAR}
+    private enum Action {INVITE, DEMOTE, PROMOTE}
 }

@@ -1,6 +1,7 @@
-package ru.minat0.scdenizenbridge;
+package ru.minat0.scdenizenbridge.utils;
 
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import ru.minat0.scdenizenbridge.SCDenizenBridge;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

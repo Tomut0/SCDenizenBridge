@@ -9,6 +9,7 @@ import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.depenizen.bukkit.Bridge;
 import ru.minat0.scdenizenbridge.objects.ClanPlayerTag;
 import ru.minat0.scdenizenbridge.objects.ClanTag;
+import ru.minat0.scdenizenbridge.utils.ReflectionUtils;
 
 public class SCBridge extends Bridge {
 

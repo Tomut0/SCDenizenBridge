@@ -1,4 +1,4 @@
-package ru.minat0.scdenizenbridge;
+package ru.minat0.scdenizenbridge.utils;
 
 import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizen.utilities.Utilities;
@@ -8,6 +8,7 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import ru.minat0.scdenizenbridge.ClanScriptEntryData;
 
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ public final class ScriptUtils {
     private ScriptUtils() {
     }
 
-    public static CheckResult defaultCheck(ScriptEntry entry, String commandName, Object... debugValues) {
+    public static CheckResult defaultCheck(ScriptEntry entry, String commandName, Object... debugValue) {
         Clan entryClan = Optional.ofNullable(ClanScriptEntryData.getEntryClan(entry)).
                 orElse(entry.getObjectTag("clan"));
         if (entryClan == null) {
@@ -30,7 +31,7 @@ public final class ScriptUtils {
         Player player = playerTag.getPlayerEntity();
 
         if (entry.dbCallShouldDebug()) {
-            Debug.report(entry, commandName, commandName, entryClan, player, debugValues);
+            Debug.report(entry, commandName, entryClan, player, debugValue);
         }
 
         return new CheckResult(entryClan, player);

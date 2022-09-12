@@ -5,20 +5,22 @@ import com.denizenscript.denizencore.objects.Argument;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
-import ru.minat0.scdenizenbridge.ScriptUtils;
+import ru.minat0.scdenizenbridge.utils.ScriptUtils;
 import ru.minat0.scdenizenbridge.objects.ClanTag;
 
 public class DisbandCommand extends AbstractCommand {
 
     public DisbandCommand() {
         setName("disband");
-        setSyntax("disband (<clan>) (announce:{true}/false}) (force:true/{false})");
+        setSyntax("disband (clan:<clan>) (announce:{true}/false}) (force:true/{false})");
     }
 
     @Override
     public void parseArgs(ScriptEntry scriptEntry) throws InvalidArgumentsException {
         for (Argument arg : scriptEntry) {
-            if (!scriptEntry.hasObject("clan") && arg.matchesArgumentType(ClanTag.class)) {
+            if (!scriptEntry.hasObject("clan")
+                    && arg.matchesArgumentType(ClanTag.class)
+                    && arg.matchesPrefix("clan")) {
                 scriptEntry.addObject("clan", arg.asType(ClanTag.class));
             } else if (!scriptEntry.hasObject("announce")
                     && arg.matchesPrefix("announce")
