@@ -6,6 +6,7 @@ import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectFetcher;
 import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.depenizen.bukkit.Bridge;
+import minat0.scdenizenbridge.commands.BbCommand;
 import minat0.scdenizenbridge.commands.DisbandCommand;
 import minat0.scdenizenbridge.objects.ClanPlayerTag;
 import minat0.scdenizenbridge.objects.ClanTag;
@@ -19,6 +20,7 @@ public class SCBridge extends Bridge {
     public void init() {
         registerEvents();
         DenizenCore.commandRegistry.registerCommand(DisbandCommand.class);
+        DenizenCore.commandRegistry.registerCommand(BbCommand.class);
         ObjectFetcher.registerWithObjectFetcher(ClanTag.class, ClanTag.tagProcessor).setAsNOtherCode().generateBaseTag();
         ObjectFetcher.registerWithObjectFetcher(ClanPlayerTag.class, ClanPlayerTag.tagProcessor).setAsNOtherCode().generateBaseTag();
 
