@@ -35,17 +35,17 @@ public class ClanTag implements ObjectTag {
     }
 
     @Fetchable("clan")
-    public static ClanTag valueOf(@NotNull String tag, TagContext context) {
-        tag = tag.replace("clan@", "");
-        Clan clan = SCDenizenBridge.getSCPlugin().getClanManager().getClan(tag);
-        if (clan != null) {
-            return new ClanTag(clan);
+    public static ClanTag valueOf(@NotNull String str, TagContext context) {
+        str = str.replace("clan@", "");
+        Clan clan = SCDenizenBridge.getSCPlugin().getClanManager().getClan(str);
+        ClanPlayerTag clanPlayerTag = ClanPlayerTag.valueOf(str);
+        if (clan == null && clanPlayerTag != null) {
+            clan = clanPlayerTag.getClanPlayer().getClan();
         }
 
-        return null;
+        return clan != null ? new ClanTag(clan) : null;
     }
 
-    // Todo: members
     // Called in Denizen internally
     @SuppressWarnings("unused")
     public static void registerTags() {
@@ -92,6 +92,10 @@ public class ClanTag implements ObjectTag {
 
         tagProcessor.registerTag(ElementTag.class, "size", (attribute, clanTag) ->
                 new ElementTag(clanTag.getClan().getSize())
+        );
+
+        tagProcessor.registerTag(ListTag.class, "members", (attribute, clanTag) ->
+                new ListTag((Collection<? extends ObjectTag>) clanTag.getClan().getMembers().stream().map(ClanPlayerTag::new).collect(Collectors.toSet()))
         );
 
         tagProcessor.registerTag(ListTag.class, "allies", (attribute, clanTag) ->
