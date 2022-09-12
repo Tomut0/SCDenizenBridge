@@ -1,26 +1,22 @@
-package minat0.scdenizenbridge;
+package ru.minat0.scdenizenbridge;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.ObjectFetcher;
+import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
 import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.depenizen.bukkit.Bridge;
-import minat0.scdenizenbridge.commands.BbCommand;
-import minat0.scdenizenbridge.commands.DisbandCommand;
-import minat0.scdenizenbridge.objects.ClanPlayerTag;
-import minat0.scdenizenbridge.objects.ClanTag;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
+import ru.minat0.scdenizenbridge.objects.ClanPlayerTag;
+import ru.minat0.scdenizenbridge.objects.ClanTag;
 
 public class SCBridge extends Bridge {
 
     @Override
     public void init() {
-        registerEvents();
-        DenizenCore.commandRegistry.registerCommand(DisbandCommand.class);
-        DenizenCore.commandRegistry.registerCommand(BbCommand.class);
+        ReflectionUtils.instantiate("ru.minat0.scdenizenbridge.events", BukkitScriptEvent.class, ScriptEvent::registerScriptEvent);
+        ReflectionUtils.instantiate("ru.minat0.scdenizenbridge.commands", AbstractCommand.class,
+                command -> DenizenCore.commandRegistry.register(command.getName(), command));
         ObjectFetcher.registerWithObjectFetcher(ClanTag.class, ClanTag.tagProcessor).setAsNOtherCode().generateBaseTag();
         ObjectFetcher.registerWithObjectFetcher(ClanPlayerTag.class, ClanPlayerTag.tagProcessor).setAsNOtherCode().generateBaseTag();
 
@@ -50,18 +46,5 @@ public class SCBridge extends Bridge {
 
             return clanPlayerTag;
         });
-    }
-
-    private void registerEvents() {
-        Set<Class<? extends BukkitScriptEvent>> events = ReflectionUtils.getSubTypesOf("minat0.scdenizenbridge.events", BukkitScriptEvent.class);
-        for (Class<? extends BukkitScriptEvent> event : events) {
-            try {
-                BukkitScriptEvent bukkitScriptEvent = event.getConstructor().newInstance();
-                ScriptEvent.registerScriptEvent(bukkitScriptEvent);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                     NoSuchMethodException ex) {
-                SCDenizenBridge.getInstance().getLogger().severe("Error registering events: " + ex.getMessage());
-            }
-        }
     }
 }
