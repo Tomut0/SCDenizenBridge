@@ -15,12 +15,11 @@ public class AllyRemoveScriptEvent extends BukkitScriptEvent implements Listener
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "first_clan" -> new ClanTag(event.getClanFirst());
             case "second_clan" -> new ClanTag(event.getClanSecond());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
 

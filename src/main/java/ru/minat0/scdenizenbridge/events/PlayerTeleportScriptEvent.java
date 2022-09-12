@@ -23,13 +23,12 @@ public class PlayerTeleportScriptEvent extends BukkitScriptEvent implements List
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "clanplayer" -> new ClanPlayerTag(event.getClanPlayer());
             case "origin" -> new LocationTag(event.getOrigin());
             case "destination" -> new LocationTag(event.getDestination());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
 

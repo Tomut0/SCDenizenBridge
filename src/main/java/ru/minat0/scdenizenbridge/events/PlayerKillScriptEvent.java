@@ -16,12 +16,11 @@ public class PlayerKillScriptEvent extends BukkitScriptEvent implements Listener
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "attacker" -> new ClanPlayerTag(event.getAttacker());
             case "victim" -> new ClanPlayerTag(event.getVictim());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler

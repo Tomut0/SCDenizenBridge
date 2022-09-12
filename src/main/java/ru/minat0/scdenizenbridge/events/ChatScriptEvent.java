@@ -28,14 +28,13 @@ public class ChatScriptEvent extends BukkitScriptEvent implements Listener {
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "sender" -> new ClanPlayerTag(event.getSender());
             case "message" -> new ElementTag(event.getMessage());
-            case "receivers" ->
-                    new ListTag((Collection<? extends ObjectTag>) event.getReceivers().stream().map(ClanPlayerTag::new).collect(Collectors.toSet()));
-        }
-
-        return super.getContext(name);
+            case "receivers" -> new ListTag((Collection<? extends ObjectTag>)
+                            event.getReceivers().stream().map(ClanPlayerTag::new).collect(Collectors.toSet()));
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler
@@ -46,6 +45,6 @@ public class ChatScriptEvent extends BukkitScriptEvent implements Listener {
 
     @Override
     public boolean couldMatch(ScriptPath path) {
-        return path.eventLower.startsWith("clan chat");
+        return path.eventLower.startsWith("clanplayer chat");
     }
 }

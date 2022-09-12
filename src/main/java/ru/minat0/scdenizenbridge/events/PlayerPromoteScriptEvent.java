@@ -23,12 +23,11 @@ public class PlayerPromoteScriptEvent extends BukkitScriptEvent implements Liste
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "clan" -> new ClanTag(event.getClan());
             case "clanplayer" -> new ClanPlayerTag(event.getClanPlayer());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler

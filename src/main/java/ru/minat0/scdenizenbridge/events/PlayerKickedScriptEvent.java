@@ -23,12 +23,11 @@ public class PlayerKickedScriptEvent extends BukkitScriptEvent implements Listen
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "tag" -> new ClanTag(event.getClan());
             case "name" -> new ClanPlayerTag(event.getClanPlayer());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler

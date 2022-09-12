@@ -24,12 +24,11 @@ public class TagChangeScriptEvent extends BukkitScriptEvent implements Listener 
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "tag" -> new ElementTag(event.getNewTag(), true);
             case "clan" -> new ClanTag(event.getClan());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler

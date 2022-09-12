@@ -15,12 +15,11 @@ public class WarStartScriptEvent extends BukkitScriptEvent implements Listener {
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "first_clan" -> new ClanTag(event.getWar().getClans().get(0));
             case "second_clan" -> new ClanTag(event.getWar().getClans().get(1));
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
 

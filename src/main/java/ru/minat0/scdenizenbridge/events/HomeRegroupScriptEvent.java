@@ -24,12 +24,11 @@ public class HomeRegroupScriptEvent extends BukkitScriptEvent implements Listene
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "clan" -> new ClanTag(event.getClan());
             case "issuer" -> new ClanPlayerTag(event.getIssuer());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler

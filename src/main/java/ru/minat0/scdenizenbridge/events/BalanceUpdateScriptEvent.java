@@ -25,15 +25,14 @@ public class BalanceUpdateScriptEvent extends BukkitScriptEvent implements Liste
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "clan" -> new ClanTag(event.getClan());
             case "clan_balance" -> new ElementTag(event.getBalance());
             case "clan_new_balance" -> new ElementTag(event.getNewBalance());
             case "updater_name" -> new ElementTag(event.getUpdater().getName());
             case "updater_balance" -> new ElementTag(event.getUpdater().getBalance());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler

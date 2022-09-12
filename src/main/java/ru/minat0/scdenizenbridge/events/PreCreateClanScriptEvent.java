@@ -23,12 +23,11 @@ public class PreCreateClanScriptEvent extends BukkitScriptEvent implements Liste
 
     @Override
     public ObjectTag getContext(String name) {
-        switch (name) {
+        return switch (name) {
             case "tag" -> new ElementTag(event.getTag());
             case "name" -> new ElementTag(event.getName());
-        }
-
-        return super.getContext(name);
+            default -> super.getContext(name);
+        };
     }
 
     @EventHandler
