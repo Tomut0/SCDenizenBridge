@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
+import java.util.UUID;
 
 public class ClanPlayerTag implements ObjectTag {
 
@@ -26,7 +27,7 @@ public class ClanPlayerTag implements ObjectTag {
         this.cp = cp;
     }
 
-    public static ClanTag valueOf(@NotNull String string) {
+    public static ClanPlayerTag valueOf(@NotNull String string) {
         return valueOf(string, null);
     }
 
@@ -35,14 +36,16 @@ public class ClanPlayerTag implements ObjectTag {
     }
 
     @Fetchable("clan")
-    public static ClanTag valueOf(@NotNull String tag, TagContext context) {
-        tag = tag.replace("clan@", "");
-        Clan clan = SCDenizenBridge.getSCPlugin().getClanManager().getClan(tag);
-        if (clan != null) {
-            return new ClanTag(clan);
+    public static ClanPlayerTag valueOf(@NotNull String str, TagContext context) {
+        str = str.replace("cp@", "");
+        ClanPlayer cp = SCDenizenBridge.getSCPlugin().getClanManager().getClanPlayer(str);
+        if (cp == null) {
+            try {
+                cp = SCDenizenBridge.getSCPlugin().getClanManager().getClanPlayer(UUID.fromString(str));
+            } catch (IllegalArgumentException ignored) {}
         }
 
-        return null;
+        return cp != null ? new ClanPlayerTag(cp) : null;
     }
 
     public static void registerTags() {
