@@ -9,11 +9,11 @@ import com.denizenscript.denizencore.objects.core.TimeTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
-import ru.minat0.scdenizenbridge.SCDenizenBridge;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import ru.minat0.scdenizenbridge.SCDenizenBridge;
 
 import java.util.Locale;
 import java.util.UUID;
@@ -45,7 +45,8 @@ public class ClanPlayerTag implements ObjectTag {
         if (cp == null) {
             try {
                 cp = SCDenizenBridge.getSCPlugin().getClanManager().getClanPlayer(UUID.fromString(str));
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
         }
 
         return cp != null ? new ClanPlayerTag(cp) : null;

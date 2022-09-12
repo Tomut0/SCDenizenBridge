@@ -38,6 +38,6 @@ public class PlayerDemoteScriptEvent extends BukkitScriptEvent implements Listen
 
     @Override
     public boolean couldMatch(ScriptPath path) {
-        return path.eventLower.startsWith("clan player demote");
+        return path.eventLower.startsWith("clanplayer demote");
     }
 }

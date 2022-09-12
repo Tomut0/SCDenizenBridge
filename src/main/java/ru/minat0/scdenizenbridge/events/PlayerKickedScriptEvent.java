@@ -24,8 +24,8 @@ public class PlayerKickedScriptEvent extends BukkitScriptEvent implements Listen
     @Override
     public ObjectTag getContext(String name) {
         return switch (name) {
-            case "tag" -> new ClanTag(event.getClan());
-            case "name" -> new ClanPlayerTag(event.getClanPlayer());
+            case "clan" -> new ClanTag(event.getClan());
+            case "clanplayer" -> new ClanPlayerTag(event.getClanPlayer());
             default -> super.getContext(name);
         };
     }
@@ -38,6 +38,6 @@ public class PlayerKickedScriptEvent extends BukkitScriptEvent implements Listen
 
     @Override
     public boolean couldMatch(ScriptPath path) {
-        return path.eventLower.startsWith("clan player kick");
+        return path.eventLower.startsWith("clanplayer kick");
     }
 }

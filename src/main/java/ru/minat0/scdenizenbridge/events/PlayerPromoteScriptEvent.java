@@ -38,6 +38,6 @@ public class PlayerPromoteScriptEvent extends BukkitScriptEvent implements Liste
 
     @Override
     public boolean couldMatch(ScriptPath path) {
-        return path.eventLower.startsWith("clan player promote");
+        return path.eventLower.startsWith("clanplayer promote");
     }
 }

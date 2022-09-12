@@ -39,6 +39,6 @@ public class PlayerJoinedScriptEvent extends BukkitScriptEvent implements Listen
 
     @Override
     public boolean couldMatch(ScriptPath path) {
-        return path.eventLower.startsWith("clan player join");
+        return path.eventLower.startsWith("clanplayer join");
     }
 }
