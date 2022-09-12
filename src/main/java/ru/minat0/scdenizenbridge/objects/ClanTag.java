@@ -1,21 +1,26 @@
 package ru.minat0.scdenizenbridge.objects;
 
 import com.denizenscript.denizen.objects.LocationTag;
+import com.denizenscript.denizencore.objects.Adjustable;
 import com.denizenscript.denizencore.objects.Fetchable;
+import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
-import ru.minat0.scdenizenbridge.SCDenizenBridge;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
+import net.sacredlabyrinth.phaed.simpleclans.events.ClanBalanceUpdateEvent;
+import net.sacredlabyrinth.phaed.simpleclans.loggers.BankLogger;
+import net.sacredlabyrinth.phaed.simpleclans.loggers.BankOperator;
 import org.jetbrains.annotations.NotNull;
+import ru.minat0.scdenizenbridge.SCDenizenBridge;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class ClanTag implements ObjectTag {
+public class ClanTag implements ObjectTag, Adjustable {
     public static ObjectTagProcessor<ClanTag> tagProcessor = new ObjectTagProcessor<>();
     private final Clan clan;
     private String prefix = "clan";
@@ -187,5 +192,44 @@ public class ClanTag implements ObjectTag {
     @Override
     public String toString() {
         return identify();
+    }
+
+    @Override
+    public void adjust(Mechanism mechanism) {
+        if (mechanism.isProperty || !mechanism.hasValue()) {
+            return;
+        }
+
+        ElementTag value = mechanism.getValue();
+        if (value.isDouble()) {
+            switch (mechanism.getName()) {
+                case "balance" -> clan.setBalance(BankOperator.API, ClanBalanceUpdateEvent.Cause.API,
+                        BankLogger.Operation.SET, value.asDouble());
+                case "member_fee" -> clan.setMemberFee(value.asDouble());
+            }
+        } else if (value.isBoolean()) {
+            switch (mechanism.getName()) {
+                case "friendly_fire" -> clan.setFriendlyFire(value.asBoolean());
+                case "allow_deposit" -> clan.setAllowDeposit(value.asBoolean());
+                case "allow_withdraw" -> clan.setAllowWithdraw(value.asBoolean());
+                case "verified" -> clan.setVerified(value.asBoolean());
+                case "permanent" -> clan.setPermanent(value.asBoolean());
+            }
+        } else if (value.canBeType(LocationTag.class) && mechanism.getName().equals("home_location")) {
+            clan.setHomeLocation(value.asType(LocationTag.class, null).getBlockLocation());
+        } else if (value.isString()) {
+            switch (mechanism.getName()) {
+                case "color_tag" -> clan.changeClanTag(value.asString());
+                case "description" -> clan.setDescription(value.asString());
+            }
+        }
+
+        SCDenizenBridge.getSCPlugin().getStorageManager().updateClan(clan);
+        mechanism.fulfill();
+    }
+
+    @Override
+    public void applyProperty(Mechanism mechanism) {
+        mechanism.echoError("Cannot apply Properties to a Clan object!");
     }
 }
