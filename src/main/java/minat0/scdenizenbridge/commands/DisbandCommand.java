@@ -26,7 +26,7 @@ public class DisbandCommand extends AbstractCommand {
     @Override
     public void parseArgs(ScriptEntry scriptEntry) throws InvalidArgumentsException {
         for (Argument arg : scriptEntry) {
-            if (!scriptEntry.hasObject("clan") && arg.matchesArgumentList(ClanTag.class)) {
+            if (!scriptEntry.hasObject("clan") && arg.matchesArgumentType(ClanTag.class)) {
                 scriptEntry.addObject("clan", arg.asType(ClanTag.class));
             } else if (!scriptEntry.hasObject("announce")
                     && arg.matchesPrefix("announce")
