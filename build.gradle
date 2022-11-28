@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'minat0'
-version = '1.0-SNAPSHOT'
+version = '2.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -28,8 +28,10 @@ repositories {
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
 
-    compileOnly files("libs/denizen-1.2.5-SNAPSHOT.jar")
-//    compileOnly "com.denizenscript:denizen:${denizenVersion}"
+    // Can be uncommented in future snapshots, depends on Denizen development
+    //compileOnly files("libs/Denizen-1.2.5.jar")
+
+    compileOnly "com.denizenscript:denizen:${denizenVersion}"
     compileOnly "com.denizenscript:depenizen:${depenizenVersion}"
     compileOnly "net.sacredlabyrinth.phaed.simpleclans:SimpleClans:${simpleclansVersion}"
 }
@@ -58,3 +60,12 @@ processResources {
         expand props
     }
 }
+
+// Uncomment on development stage to copy a plugin to the local server
+/*
+task copyJar() {
+    copy {
+        from "build/libs/sc-denizen-bridge-${version}.jar"
+        into "${serverFolder}"
+    }
+}*/
