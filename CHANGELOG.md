@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/Tomut0/SCDenizenBridge/compare/v2.0.0...v2.1.0) (2022-11-28)
+
+
+### Features
+
+* FrameTag + FrameOpenScriptEvent ([72028e5](https://github.com/Tomut0/SCDenizenBridge/commit/72028e53765b59624550afb4c98afa00946aaf07))
+
+
+### Bug Fixes
+
+* update events naming convention ([95d4e17](https://github.com/Tomut0/SCDenizenBridge/commit/95d4e1737cbb255e93f34d30ede3f3f5dd2bc445))
+
 ## 2.0.0 (2022-09-12)
 
 
