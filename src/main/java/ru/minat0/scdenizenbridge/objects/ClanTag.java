@@ -39,7 +39,7 @@ public class ClanTag implements ObjectTag, Adjustable {
         return valueOf(arg) != null;
     }
 
-    @Fetchable("clan")
+    @Fetchable("c")
     public static ClanTag valueOf(@NotNull String str, TagContext context) {
         str = str.replace("clan@", "");
         Clan clan = SCDenizenBridge.getSCPlugin().getClanManager().getClan(str);
@@ -170,7 +170,7 @@ public class ClanTag implements ObjectTag, Adjustable {
 
     @Override
     public String identify() {
-        return "clan@" + clan.getTag();
+        return prefix + "@" + clan.getTag();
     }
 
     @Override
@@ -229,7 +229,12 @@ public class ClanTag implements ObjectTag, Adjustable {
     }
 
     @Override
+    public Object getJavaObject() {
+        return getClan();
+    }
+
+    @Override
     public void applyProperty(Mechanism mechanism) {
-        mechanism.echoError("Cannot apply Properties to a Clan object!");
+        mechanism.echoError("Cannot apply properties to a Clan object!");
     }
 }

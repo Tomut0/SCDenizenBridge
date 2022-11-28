@@ -22,7 +22,7 @@ public class ClanPlayerTag implements ObjectTag {
 
     public static ObjectTagProcessor<ClanPlayerTag> tagProcessor = new ObjectTagProcessor<>();
     private final ClanPlayer cp;
-    private String prefix = "cp";
+    private String prefix = "clanplayer";
 
     public ClanPlayerTag(@NotNull ClanPlayer cp) {
         this.cp = cp;
@@ -38,9 +38,9 @@ public class ClanPlayerTag implements ObjectTag {
         return valueOf(arg) != null;
     }
 
-    @Fetchable("clan")
+    @Fetchable("cp")
     public static ClanPlayerTag valueOf(@NotNull String str, TagContext context) {
-        str = str.replace("cp@", "");
+        str = str.replace("clanplayer@", "");
         ClanPlayer cp = SCDenizenBridge.getSCPlugin().getClanManager().getClanPlayer(str);
         if (cp == null) {
             try {
@@ -170,7 +170,7 @@ public class ClanPlayerTag implements ObjectTag {
 
     @Override
     public String identify() {
-        return "cp@" + getClanPlayer().getUniqueId();
+        return prefix + "@" + getClanPlayer().getUniqueId();
     }
 
     @Override
@@ -187,6 +187,11 @@ public class ClanPlayerTag implements ObjectTag {
     @Override
     public ObjectTag getObjectAttribute(Attribute attribute) {
         return tagProcessor.getObjectAttribute(this, attribute);
+    }
+
+    @Override
+    public Object getJavaObject() {
+        return getClanPlayer();
     }
 
     @Override

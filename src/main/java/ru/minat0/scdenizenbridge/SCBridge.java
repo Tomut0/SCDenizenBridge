@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.minat0.scdenizenbridge.objects.ClanPlayerTag;
 import ru.minat0.scdenizenbridge.objects.ClanTag;
+import ru.minat0.scdenizenbridge.objects.FrameTag;
 import ru.minat0.scdenizenbridge.properties.PlayerClanProperties;
 import ru.minat0.scdenizenbridge.utils.ReflectionUtils;
 
@@ -28,6 +29,7 @@ public class SCBridge extends Bridge {
 
         ObjectFetcher.registerWithObjectFetcher(ClanPlayerTag.class, ClanPlayerTag.tagProcessor).setAsNOtherCode().generateBaseTag();
         ObjectFetcher.registerWithObjectFetcher(ClanTag.class, ClanTag.tagProcessor).setAsNOtherCode().generateBaseTag();
+        ObjectFetcher.registerWithObjectFetcher(FrameTag.class, FrameTag.tagProcessor).setAsNOtherCode().generateBaseTag();
 
         PropertyParser.registerProperty(PlayerClanProperties.class, PlayerTag.class);
 
@@ -35,6 +37,8 @@ public class SCBridge extends Bridge {
                 (ClanTag) asType(ClanTag.class, attribute));
         TagManager.registerTagHandler(ClanPlayerTag.class, "clanplayer", attribute ->
                 (ClanPlayerTag) asType(ClanPlayerTag.class, attribute));
+        TagManager.registerTagHandler(FrameTag.class, "frame", attribute ->
+                (FrameTag) asType(FrameTag.class, attribute));
     }
 
     private @Nullable <T extends ObjectTag> ObjectTag asType(@NotNull Class<T> clazz, Attribute attribute) {
