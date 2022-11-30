@@ -41,13 +41,13 @@ public class ClanCommand extends AbstractCommand {
     public void execute(ScriptEntry scriptEntry) {
         ElementTag actionTag = scriptEntry.getElement("action");
         ClanCommand.Action action = ClanCommand.Action.valueOf(actionTag.asString().toUpperCase());
-        ScriptUtils.CheckResult checkResult = ScriptUtils.defaultCheck(scriptEntry, getName(), actionTag.asString());
-        UUID uniqueId = checkResult.player().getUniqueId();
+        ScriptUtils.SCHolder holder = ScriptUtils.defaultCheck(scriptEntry, getName(), actionTag.asString());
+        UUID uniqueId = holder.player().getUniqueId();
 
         switch (action) {
-            case PROMOTE -> checkResult.clan().promote(uniqueId);
-            case DEMOTE -> checkResult.clan().demote(uniqueId);
-            case INVITE -> checkResult.clan().addPlayerToClan(new ClanPlayer(uniqueId));
+            case PROMOTE -> holder.clan().promote(uniqueId);
+            case DEMOTE -> holder.clan().demote(uniqueId);
+            case INVITE -> holder.clan().addPlayerToClan(new ClanPlayer(uniqueId));
             default -> throw new InvalidArgumentsRuntimeException("Must specify a valid action!");
         }
     }

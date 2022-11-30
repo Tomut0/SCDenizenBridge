@@ -1,6 +1,7 @@
 package ru.minat0.scdenizenbridge.utils;
 
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.jetbrains.annotations.NotNull;
 import ru.minat0.scdenizenbridge.SCDenizenBridge;
 
 import java.io.IOException;
@@ -85,6 +86,13 @@ public final class ReflectionUtils {
                 collect(Collectors.toSet());
     }
 
+    public static <T> T getMethodValue(Class<?> clazz, @NotNull String name, Object obj) {
+        try {
+            return (T) clazz.getDeclaredMethod(name).invoke(obj);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            return null;
+        }
+    }
     public static <T> void instantiate(String packageName, Class<T> type, Consumer<T> consumer) {
         Set<Class<?>> classSet = ReflectionUtils.getSubTypesOf(packageName, type);
         for (Class<?> clazz : classSet) {

@@ -6,11 +6,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SCDenizenBridge extends JavaPlugin {
 
-    private static SimpleClans ScPlugin;
+    private static SimpleClans scPlugin;
     private static SCDenizenBridge instance;
 
     public static SimpleClans getSCPlugin() {
-        return ScPlugin;
+        return scPlugin;
     }
 
     public static SCDenizenBridge getInstance() {
@@ -22,7 +22,7 @@ public final class SCDenizenBridge extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         instance = this;
-        ScPlugin = SimpleClans.getInstance();
+        scPlugin = SimpleClans.getInstance();
         Depenizen.instance.registerBridge("SimpleClans", () -> new SCBridge());
         Depenizen.instance.loadBridge("SimpleClans", () -> new SCBridge());
     }
