@@ -53,20 +53,6 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
         }, SCDenizenBridge.getInstance());
     }
 
-    /**
-     * <h2>Retrieve a context of all events</h2>
-     * <p>
-     * In simply words, this method tries to compare <context.[value]> with existed method name.
-     * Example: {@literal <}context.frame{@literal >} -{@literal >} getFrame
-     * </p>
-     * <p>
-     * Then it tries to get a value from that method, gets a type of the objectTag and invoke it.
-     * getFrame -{@literal >} new frameTag(getFrame()) -{@literal >} return
-     * </p>
-     *
-     * @param name a value of the context, same as the method name
-     * @return {@link ObjectTag} a tag
-     */
     @Override
     public ObjectTag getContext(String name) {
         Optional<String> method = methods.stream().
@@ -80,10 +66,13 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
 
         Object value = Objects.requireNonNull(getEventValue(method.get()));
 
+        if (value instanceof SCFrame frame) {
+            return new FrameTag(frame);
+        }
+
         return switch (value.getClass().getSimpleName()) {
             case "Clan" -> new ClanTag(((Clan) value));
             case "ClanPlayer" -> new ClanPlayerTag(((ClanPlayer) value));
-            case "SCFrame" -> new FrameTag(((SCFrame) value));
             // List of unsupported tags, possibly I will take care about them later
             case "SCComponent" -> new ItemTag(((SCComponent) value).getItem());
             case "Rank" -> new ElementTag(((Rank) value).getName());
@@ -92,7 +81,7 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
             case "BankOperator" -> new ElementTag(((BankOperator) value).getName());
             case "War" ->
                     new ListTag((Collection<? extends ObjectTag>) ((War) value).getClans().stream().map(ClanTag::new).collect(Collectors.toSet()));
-            default -> CoreUtilities.objectToTagForm(value, null, false, true);
+            default -> CoreUtilities.objectToTagForm(value, getTagContext(tryingToBuildPath), false, true);
         };
     }
 
