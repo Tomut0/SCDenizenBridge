@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/Tomut0/SCDenizenBridge/compare/v2.1.0...v3.0.0) (2022-12-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Dynamic loading of SimpleClans events
+
+### Features
+
+* Dynamic loading of SimpleClans events ([71c848b](https://github.com/Tomut0/SCDenizenBridge/commit/71c848b7d240b26c227d2b87de608d1daab96234))
+
 ## [2.1.0](https://github.com/Tomut0/SCDenizenBridge/compare/v2.0.0...v2.1.0) (2022-11-28)
 
 
