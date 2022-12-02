@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'minat0'
-version = '2.1-SNAPSHOT'
+version = '3.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()

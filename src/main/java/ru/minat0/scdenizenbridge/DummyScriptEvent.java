@@ -9,6 +9,7 @@ import com.denizenscript.denizencore.scripts.ScriptEntryData;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.events.ChatEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.ClanBalanceUpdateEvent;
 import net.sacredlabyrinth.phaed.simpleclans.events.FrameOpenEvent;
 import net.sacredlabyrinth.phaed.simpleclans.events.WarEndEvent;
 import net.sacredlabyrinth.phaed.simpleclans.loggers.BankOperator;
@@ -79,6 +80,7 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
             case "Request" -> new ElementTag(((Request) value).getType().name());
             case "WarEndEvent.Reason" -> new ElementTag(((WarEndEvent.Reason) value).name());
             case "BankOperator" -> new ElementTag(((BankOperator) value).getName());
+            case "ClanBalanceUpdateEvent.Cause" -> new ElementTag(((ClanBalanceUpdateEvent.Cause) value).name());
             case "War" ->
                     new ListTag((Collection<? extends ObjectTag>) ((War) value).getClans().stream().map(ClanTag::new).collect(Collectors.toSet()));
             default -> CoreUtilities.objectToTagForm(value, getTagContext(tryingToBuildPath), false, true);
