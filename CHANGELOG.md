@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/Tomut0/SCDenizenBridge/compare/v3.0.0...v3.0.1) (2022-12-02)
+
+
+### Bug Fixes
+
+* add ClanBalanceUpdateEvent.Cause half compatibility ([794c75d](https://github.com/Tomut0/SCDenizenBridge/commit/794c75d413d4b300e0c1aa816e4d766515dab625))
+
 ## [3.0.0](https://github.com/Tomut0/SCDenizenBridge/compare/v2.1.0...v3.0.0) (2022-12-02)
 
 
