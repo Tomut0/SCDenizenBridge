@@ -136,6 +136,7 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
         }
 
         Function<Request, Player> requestToPlayer = request -> request.getRequester().toPlayer();
+        Function<BankOperator, Player> operatorToPlayer = operator -> Bukkit.getPlayerExact(operator.getName());
 
         // These methods require a unique way to retrieve issuer
         Player player = switch (eventName) {
@@ -143,7 +144,7 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
             case "FrameOpenEvent" -> mapMethod("getFrame", SCFrame::getViewer).orElse(null);
             case "ClanPlayerTeleportEvent", "PlayerHomeSetEvent" ->
                     mapMethod("getClanPlayer", ClanPlayer::toPlayer).orElse(null);
-            case "ClanBalanceUpdateEvent" -> mapMethod("getUpdater", Bukkit::getPlayerExact).orElse(null);
+            case "ClanBalanceUpdateEvent" -> mapMethod("getUpdater", operatorToPlayer).orElse(null);
             case "RequestEvent", "RequestFinishedEvent" -> mapMethod("getRequest", requestToPlayer).orElse(null);
             default -> null;
         };
