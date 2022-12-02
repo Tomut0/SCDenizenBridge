@@ -6,14 +6,25 @@ import com.denizenscript.denizencore.exceptions.InvalidArgumentsRuntimeException
 import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
+import net.sacredlabyrinth.phaed.simpleclans.ui.SCFrame;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.minat0.scdenizenbridge.ClanScriptEntryData;
+import ru.minat0.scdenizenbridge.SCDenizenBridge;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class ScriptUtils {
+    public static final Set<String> frames = ReflectionUtils.getSubTypesOf(SCDenizenBridge.getSCPlugin().getClass(), "net.sacredlabyrinth.phaed.simpleclans.ui.frames", SCFrame.class).
+            stream().
+            map(Class::getSimpleName).
+            map(s -> s.replace("Frame", "")).
+            map(String::toLowerCase).
+            collect(Collectors.toSet());
+
     private ScriptUtils() {
     }
 

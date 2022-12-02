@@ -8,6 +8,8 @@ import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.events.ChatEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.FrameOpenEvent;
 import net.sacredlabyrinth.phaed.simpleclans.events.WarEndEvent;
 import net.sacredlabyrinth.phaed.simpleclans.loggers.BankOperator;
 import net.sacredlabyrinth.phaed.simpleclans.ui.SCComponent;
@@ -95,6 +97,17 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
     }
 
     @Override
+    public boolean matches(ScriptPath path) {
+        // SCDenizenBridge 2.1 compatibility
+        if (!(event == FrameOpenEvent.class)) {
+            return super.matches(path);
+        }
+
+        String frame = ((FrameOpenEvent) eventObj).getFrame().getClass().getSimpleName().replace("Frame", "");
+        return frame.equalsIgnoreCase(path.eventArgLowerAt(1)) || path.eventArgLowerAt(1).equals("open");
+    }
+
+    @Override
     public ScriptEntryData getScriptEntryData() {
         ScriptUtils.SCHolder holder = getIssuer();
         return new ClanScriptEntryData(holder.player(), holder.clan());
@@ -108,7 +121,12 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
         var eventName = String.join(" ", split).toLowerCase();
 
         // To not confuse with https://github.com/DenizenScript/Denizen/blob/dev/plugin/src/main/java/com/denizenscript/denizen/events/player/ChatScriptEvent.java#L28
-        if (eventName.equals("chat")) eventName = "clan player chats";
+        if (event == ChatEvent.class) {
+            eventName = "clan player chats";
+        } else if (event == FrameOpenEvent.class) {
+            // SCDenizenBridge 2.1 compatibility
+            return path.eventLower.startsWith("frame") && (ScriptUtils.frames.contains(path.eventArgLowerAt(1)) || path.eventLower.endsWith("open"));
+        }
 
         return path.eventLower.startsWith(eventName);
     }
