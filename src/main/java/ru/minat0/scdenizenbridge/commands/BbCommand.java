@@ -42,7 +42,7 @@ public class BbCommand extends AbstractCommand {
     public void execute(ScriptEntry scriptEntry) {
         ElementTag actionTag = scriptEntry.getElement("action");
         ElementTag message = scriptEntry.getElement("message");
-        ScriptUtils.CheckResult checkResult = ScriptUtils.defaultCheck(scriptEntry, getName(), actionTag.asString());
+        ScriptUtils.SCHolder SCHolder = ScriptUtils.defaultCheck(scriptEntry, getName(), actionTag.asString());
 
         Action action = Action.valueOf(actionTag.asString().toUpperCase());
         if ((message == null || message.asString().isEmpty()) && action.equals(Action.ADD)) {
@@ -50,9 +50,9 @@ public class BbCommand extends AbstractCommand {
         }
 
         switch (action) {
-            case ADD -> checkResult.clan().addBb(checkResult.player().getName(), message.asString());
-            case SHOW -> checkResult.clan().displayBb(checkResult.player());
-            case CLEAR -> checkResult.clan().clearBb();
+            case ADD -> SCHolder.clan().addBb(SCHolder.player().getName(), message.asString());
+            case SHOW -> SCHolder.clan().displayBb(SCHolder.player());
+            case CLEAR -> SCHolder.clan().clearBb();
             default -> throw new InvalidArgumentsRuntimeException("Must specify a valid action!");
         }
     }

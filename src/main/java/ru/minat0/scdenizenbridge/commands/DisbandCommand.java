@@ -41,7 +41,7 @@ public class DisbandCommand extends AbstractCommand {
     public void execute(ScriptEntry scriptEntry) {
         ElementTag announce = scriptEntry.getElement("announce");
         ElementTag force = scriptEntry.getElement("force");
-        ScriptUtils.CheckResult checkResult = ScriptUtils.defaultCheck(scriptEntry, getName(), announce, force);
-        checkResult.clan().disband(checkResult.player(), announce.asBoolean(), force.asBoolean());
+        ScriptUtils.SCHolder SCHolder = ScriptUtils.defaultCheck(scriptEntry, getName(), announce, force);
+        SCHolder.clan().disband(SCHolder.player(), announce.asBoolean(), force.asBoolean());
     }
 }
