@@ -29,6 +29,26 @@ public class SCBridge extends Bridge {
 
     @Override
     public void init() {
+        registerEvents();
+
+        ReflectionUtils.instantiate("ru.minat0.scdenizenbridge.commands", AbstractCommand.class,
+                command -> DenizenCore.commandRegistry.register(command.getName(), command));
+
+        ObjectFetcher.registerWithObjectFetcher(ClanPlayerTag.class, ClanPlayerTag.tagProcessor).setAsNOtherCode().setCanConvertStatic().generateBaseTag();
+        ObjectFetcher.registerWithObjectFetcher(ClanTag.class, ClanTag.tagProcessor).setAsNOtherCode().setCanConvertStatic().generateBaseTag();
+        ObjectFetcher.registerWithObjectFetcher(FrameTag.class, FrameTag.tagProcessor).setAsNOtherCode().setCanConvertStatic().generateBaseTag();
+
+        PropertyParser.registerProperty(PlayerClanProperties.class, PlayerTag.class);
+
+        TagManager.registerTagHandler(ClanTag.class, "clan", attribute ->
+                (ClanTag) asType(ClanTag.class, attribute));
+        TagManager.registerTagHandler(ClanPlayerTag.class, "clanplayer", attribute ->
+                (ClanPlayerTag) asType(ClanPlayerTag.class, attribute));
+        TagManager.registerTagHandler(FrameTag.class, "frame", attribute ->
+                (FrameTag) asType(FrameTag.class, attribute));
+    }
+
+    private static void registerEvents() {
         Set<Class<? extends Event>> events = ReflectionUtils.getSubTypesOf(SCDenizenBridge.getSCPlugin().getClass(), "net.sacredlabyrinth.phaed.simpleclans.events", Event.class);
 
         HashMap<Class<?>, Set<Method>> scEvents = new HashMap<>();
@@ -43,22 +63,6 @@ public class SCBridge extends Bridge {
             //noinspection unchecked
             ScriptEvent.registerScriptEvent(new DummyScriptEvent((Class<? extends Event>) entry.getKey(), entry.getValue()));
         }
-
-        ReflectionUtils.instantiate("ru.minat0.scdenizenbridge.commands", AbstractCommand.class,
-                command -> DenizenCore.commandRegistry.register(command.getName(), command));
-
-        ObjectFetcher.registerWithObjectFetcher(ClanPlayerTag.class, ClanPlayerTag.tagProcessor).setAsNOtherCode().generateBaseTag();
-        ObjectFetcher.registerWithObjectFetcher(ClanTag.class, ClanTag.tagProcessor).setAsNOtherCode().generateBaseTag();
-        ObjectFetcher.registerWithObjectFetcher(FrameTag.class, FrameTag.tagProcessor).setAsNOtherCode().generateBaseTag();
-
-        PropertyParser.registerProperty(PlayerClanProperties.class, PlayerTag.class);
-
-        TagManager.registerTagHandler(ClanTag.class, "clan", attribute ->
-                (ClanTag) asType(ClanTag.class, attribute));
-        TagManager.registerTagHandler(ClanPlayerTag.class, "clanplayer", attribute ->
-                (ClanPlayerTag) asType(ClanPlayerTag.class, attribute));
-        TagManager.registerTagHandler(FrameTag.class, "frame", attribute ->
-                (FrameTag) asType(FrameTag.class, attribute));
     }
 
     private @Nullable <T extends ObjectTag> ObjectTag asType(@NotNull Class<T> clazz, Attribute attribute) {

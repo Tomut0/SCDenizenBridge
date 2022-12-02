@@ -1,14 +1,16 @@
 package ru.minat0.scdenizenbridge;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
-import com.denizenscript.denizencore.objects.ObjectFetcher;
+import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
-import com.denizenscript.denizencore.objects.ObjectType;
 import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Request;
+import com.denizenscript.denizencore.utilities.CoreUtilities;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.events.WarEndEvent;
+import net.sacredlabyrinth.phaed.simpleclans.loggers.BankOperator;
+import net.sacredlabyrinth.phaed.simpleclans.ui.SCComponent;
 import net.sacredlabyrinth.phaed.simpleclans.ui.SCFrame;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -17,13 +19,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.minat0.scdenizenbridge.objects.ClanPlayerTag;
+import ru.minat0.scdenizenbridge.objects.ClanTag;
+import ru.minat0.scdenizenbridge.objects.FrameTag;
 import ru.minat0.scdenizenbridge.utils.ScriptUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
-import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import static ru.minat0.scdenizenbridge.utils.ReflectionUtils.getMethodValue;
 
@@ -62,8 +69,8 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
     public ObjectTag getContext(String name) {
         Optional<String> method = methods.stream().
                 filter(m -> m.getParameterTypes().length == 0). // Only getters
-                map(Method::getName).
-                filter(methodName -> methodName.toLowerCase().endsWith(name)).findAny();
+                        map(Method::getName).
+                filter(methodName -> methodName.startsWith("get") && methodName.toLowerCase().endsWith(name)).findAny();
 
         if (method.isEmpty()) {
             return super.getContext(name);
@@ -71,29 +78,20 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
 
         Object value = Objects.requireNonNull(getEventValue(method.get()));
 
-        if (!ObjectFetcher.objectsByName.containsKey(name)) {
-            /*
-             * Todo: More support for contexts
-             *
-             * Currently, it supports methods that are return objectTag:
-             * i.e getClan -> objectsByName(clan) -> ClanTagType -> new ClanTag(value)
-             *
-             * Methods like <context.message> / <context.sender> isn't supported as objectsByName isn't contain sender tag.
-             */
-            return new ElementTag("Not supported yet!");
-        }
-
-        ObjectType<? extends ObjectTag> type = ObjectFetcher.objectsByName.get(name);
-
-        try {
-            return type.clazz.getDeclaredConstructor(value.getClass()).newInstance(value);
-        } catch (NoSuchMethodException ignored) {
-            // will never be thrown since check above
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException ex) {
-            SCDenizenBridge.getSCPlugin().getLogger().log(Level.SEVERE, "Can't invoke {} event constructor with value {}: {}", new Object[]{eventName, value, ex.getMessage()});
-        }
-
-        return super.getContext(name);
+        return switch (value.getClass().getSimpleName()) {
+            case "Clan" -> new ClanTag(((Clan) value));
+            case "ClanPlayer" -> new ClanPlayerTag(((ClanPlayer) value));
+            case "SCFrame" -> new FrameTag(((SCFrame) value));
+            // List of unsupported tags, possibly I will take care about them later
+            case "SCComponent" -> new ItemTag(((SCComponent) value).getItem());
+            case "Rank" -> new ElementTag(((Rank) value).getName());
+            case "Request" -> new ElementTag(((Request) value).getType().name());
+            case "WarEndEvent.Reason" -> new ElementTag(((WarEndEvent.Reason) value).name());
+            case "BankOperator" -> new ElementTag(((BankOperator) value).getName());
+            case "War" ->
+                    new ListTag((Collection<? extends ObjectTag>) ((War) value).getClans().stream().map(ClanTag::new).collect(Collectors.toSet()));
+            default -> CoreUtilities.objectToTagForm(value, null, false, true);
+        };
     }
 
     @Override
@@ -124,6 +122,7 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
         Optional<Clan> clanOpt = Optional.ofNullable(getEventValue("getClan"));
         Clan clan = clanOpt.orElse(null);
 
+        // todo: make a function that takes any parameter and returns player, use it in switch (eventName) below
         Function<?, Player> toPlayer = commandSender -> commandSender instanceof Player pl ? pl : commandSender instanceof ClanPlayer cp ? cp.toPlayer() : null;
 
         Optional<Player> getSender = mapMethod("getSender", toPlayer);
