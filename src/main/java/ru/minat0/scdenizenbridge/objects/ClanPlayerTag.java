@@ -1,14 +1,14 @@
 package ru.minat0.scdenizenbridge.objects;
 
 import com.denizenscript.denizen.objects.PlayerTag;
-import com.denizenscript.denizencore.objects.Fetchable;
-import com.denizenscript.denizencore.objects.ObjectTag;
+import com.denizenscript.denizencore.objects.*;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.core.TimeTag;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
+import com.denizenscript.denizencore.utilities.debugging.Debug;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import ru.minat0.scdenizenbridge.SCDenizenBridge;
 import java.util.Locale;
 import java.util.UUID;
 
-public class ClanPlayerTag implements ObjectTag {
+public class ClanPlayerTag implements ObjectTag, Adjustable {
 
     public static ObjectTagProcessor<ClanPlayerTag> tagProcessor = new ObjectTagProcessor<>();
     private final ClanPlayer cp;
@@ -197,5 +197,51 @@ public class ClanPlayerTag implements ObjectTag {
     @Override
     public String toString() {
         return identify();
+    }
+
+    @Override
+    public void adjust(Mechanism mechanism) {
+        if (mechanism.isProperty || !mechanism.hasValue()) {
+            return;
+        }
+
+        ElementTag value = mechanism.getValue();
+        switch (mechanism.getName().toLowerCase()) {
+            case "channel" -> cp.setChannel(ClanPlayer.Channel.valueOf(value.asString()));
+            case "locale" -> cp.setLocale(new Locale(value.asString()));
+            case "name" -> cp.setName(value.asString());
+            case "rank" -> cp.setRank(value.asString());
+            case "uuid" -> cp.setUniqueId(UUID.fromString(value.asString()));
+            case "flags" -> cp.setFlags(value.asString());
+            case "ally_kills" -> cp.setAllyKills(value.asInt());
+            case "civilian_kills" -> cp.setCivilianKills(value.asInt());
+            case "neutral_kills" -> cp.setNeutralKills(value.asInt());
+            case "rival_kills" -> cp.setRivalKills(value.asInt());
+            case "deaths" -> cp.setDeaths(value.asInt());
+            case "bb_enabled" -> cp.setBbEnabled(value.asBoolean());
+            case "friendly_fire" -> cp.setFriendlyFire(value.asBoolean());
+            case "invite_enabled" -> cp.setInviteEnabled(value.asBoolean());
+            case "tag_enabled" -> cp.setTagEnabled(value.asBoolean());
+            case "trusted" -> cp.setTrusted(value.asBoolean());
+            case "leader" -> cp.setLeader(value.asBoolean());
+            case "clan" -> cp.setClan(value.asType(ObjectFetcher.getType(ClanTag.class), mechanism.context).getClan());
+            case "mute" -> {
+                String[] split = value.asString().split(",", 2);
+                try {
+                    ClanPlayer.Channel channel = ClanPlayer.Channel.valueOf(split[0]);
+                    cp.mute(channel, Boolean.parseBoolean(split[1]));
+                } catch (IllegalArgumentException ex) {
+                    Debug.echoError("Wrong channel! Must be CLAN, ALLY, NONE.");
+                }
+            }
+        }
+
+        SCDenizenBridge.getSCPlugin().getStorageManager().updateClanPlayer(cp);
+        mechanism.fulfill();
+    }
+
+    @Override
+    public void applyProperty(Mechanism mechanism) {
+        mechanism.echoError("Cannot apply properties to a ClanPlayer object!");
     }
 }

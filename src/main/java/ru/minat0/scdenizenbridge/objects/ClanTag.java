@@ -216,7 +216,7 @@ public class ClanTag implements ObjectTag, Adjustable {
                 case "permanent" -> clan.setPermanent(value.asBoolean());
             }
         } else if (value.canBeType(LocationTag.class) && mechanism.getName().equals("home_location")) {
-            clan.setHomeLocation(value.asType(LocationTag.class, null).getBlockLocation());
+            clan.setHomeLocation(value.asType(LocationTag.class, mechanism.context).getBlockLocation());
         } else if (value.isString()) {
             switch (mechanism.getName()) {
                 case "color_tag" -> clan.changeClanTag(value.asString());
