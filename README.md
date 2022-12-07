@@ -1,4 +1,5 @@
-![Spigot Downloads](https://img.shields.io/spiget/downloads/105250?label=Spigot%20Downloads&style=flat-square)
+[![Spigot Downloads](https://img.shields.io/spiget/downloads/105250?label=Spigot%20Downloads&style=flat-square)](https://www.spigotmc.org/resources/scdenizenbridge.105250/)
+[![Curseforge](https://cf.way2muchnoise.eu/title/scdenizenbridge.svg?badge_style=flat)](https://www.curseforge.com/minecraft/bukkit-plugins/scdenizenbridge)
 [![Discord](https://img.shields.io/discord/719557355917934613?label=discord&logo=discord&style=flat-square)](https://discord.gg/CkNwgdE)
 
 # SCDenizenBridge
