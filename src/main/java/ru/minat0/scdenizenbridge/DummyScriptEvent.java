@@ -149,7 +149,7 @@ public class DummyScriptEvent extends BukkitScriptEvent implements Listener {
         // These methods require a unique way to retrieve issuer
         Player player = switch (eventName) {
             case "CreateClanEvent" -> clanOpt.map(c -> c.getLeaders().get(0).toPlayer()).orElse(null);
-            case "FrameOpenEvent" -> mapMethod("getFrame", SCFrame::getViewer).orElse(null);
+            case "FrameOpenEvent", "ComponentClickEvent" -> mapMethod("getFrame", SCFrame::getViewer).orElse(null);
             case "ClanPlayerTeleportEvent", "PlayerHomeSetEvent" ->
                     mapMethod("getClanPlayer", ClanPlayer::toPlayer).orElse(null);
             case "ClanBalanceUpdateEvent" -> mapMethod("getUpdater", operatorToPlayer).orElse(null);
