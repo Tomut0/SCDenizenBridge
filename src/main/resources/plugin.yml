@@ -1,7 +1,7 @@
 name: SCDenizenBridge
 version: '${version}'
 main: ru.minat0.scdenizenbridge.SCDenizenBridge
-api-version: 1.19
+api-version: 1.17
 depend: [ SimpleClans, Depenizen ]
 authors: [ Minat0 ]
 description: A simple bridge between Denizen and SimpleClans. 
