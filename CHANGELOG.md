@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.2](https://github.com/Tomut0/SCDenizenBridge/compare/v3.0.1...v3.1.2) (2025-03-07)
+
+
+### Features
+
+* ClanPlayer is adjustable now! ([193e83c](https://github.com/Tomut0/SCDenizenBridge/commit/193e83cca94eb982234507cad21a5ae768ddeb90))
+
+
+### Bug Fixes
+
+* Depenizen#loadBridge breaking change ([8d3d5a1](https://github.com/Tomut0/SCDenizenBridge/commit/8d3d5a167317b10a680f5d19c54ea324efa39d55))
+* missing issuer for ComponentClickEvent ([0b85400](https://github.com/Tomut0/SCDenizenBridge/commit/0b854001ee2e9553329d0863a7846b0869477c61))
+* support for 1.17 and upper ([d0d8019](https://github.com/Tomut0/SCDenizenBridge/commit/d0d80191f56c94be5324374396022bcc7b16991b))
+
 ## [3.1.0](https://github.com/Tomut0/SCDenizenBridge/compare/v3.0.1...v3.1.0) (2022-12-07)
 
 
