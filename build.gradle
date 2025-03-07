@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'minat0'
-version = '3.0.1-SNAPSHOT'
+version = '3.1.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -31,8 +31,10 @@ dependencies {
     // Can be uncommented in future snapshots, depends on Denizen development
     //compileOnly files("libs/Denizen-1.2.5.jar")
 
+    // Denizen team doesn't know what's snapshots and how to release them on their maven repo, what a shame
+    compileOnly files("libs/Depenizen-2.1.1-b873.jar")
     compileOnly "com.denizenscript:denizen:${denizenVersion}"
-    compileOnly "com.denizenscript:depenizen:${depenizenVersion}"
+    // compileOnly "com.denizenscript:depenizen:${depenizenVersion}"
     compileOnly "net.sacredlabyrinth.phaed.simpleclans:SimpleClans:${simpleclansVersion}"
 }
 
