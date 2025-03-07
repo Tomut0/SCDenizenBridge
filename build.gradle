@@ -36,7 +36,7 @@ dependencies {
     compileOnly "net.sacredlabyrinth.phaed.simpleclans:SimpleClans:${simpleclansVersion}"
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
