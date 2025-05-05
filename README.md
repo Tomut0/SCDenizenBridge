@@ -5,6 +5,11 @@
 # SCDenizenBridge
 This is a bridge for SimpleClans and Denizen that allows you writing your own
 scripts with SimpleClans' API on Denizen.
+
+## ⚠️ No longer actively maintained
+The maintainer can't continue actively maintaining this project for one year.
+Try come back later.
+
 ## Why I made it?
 I found Denizen to be handy and comfortable when it comes to some small changes on your server.
 
